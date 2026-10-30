@@ -23,6 +23,7 @@ describe('metrics', () => {
     expect(m.filesEdited).toBe(2) // a.ts counted once
     expect(m.linesAdded).toBe(14)
     expect(m.linesRemoved).toBe(3)
+    expect(m.netLines).toBe(11) // 14 added - 3 removed
     expect(m.filesRead).toBe(1)
     expect(m.hasFinalMessage).toBe(true)
   })

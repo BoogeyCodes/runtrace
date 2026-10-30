@@ -8,6 +8,9 @@ export function metrics(trace: Trace): TraceMetrics {
 
   const failedCommands = [...commands, ...tests].filter((s) => s.exitCode !== undefined && s.exitCode !== 0).length
 
+  const linesAdded = edits.reduce((sum, s) => sum + (s.added ?? 0), 0)
+  const linesRemoved = edits.reduce((sum, s) => sum + (s.removed ?? 0), 0)
+
   // Pass/fail of the test steps: known only if at least one test step reports an exit code.
   const testsWithCode = tests.filter((s) => s.exitCode !== undefined)
   const testsPassed = testsWithCode.length === 0 ? null : testsWithCode.every((s) => s.exitCode === 0)
@@ -18,8 +21,9 @@ export function metrics(trace: Trace): TraceMetrics {
     failedCommands,
     filesEdited: new Set(edits.map((s) => s.text)).size,
     filesRead: new Set(trace.steps.filter((s) => s.kind === 'file_read').map((s) => s.text)).size,
-    linesAdded: edits.reduce((sum, s) => sum + (s.added ?? 0), 0),
-    linesRemoved: edits.reduce((sum, s) => sum + (s.removed ?? 0), 0),
+    linesAdded,
+    linesRemoved,
+    netLines: linesAdded - linesRemoved,
     testRuns: tests.length,
     testsPassed,
     ranTests: tests.length > 0,

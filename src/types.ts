@@ -31,6 +31,8 @@ export interface TraceMetrics {
   filesRead: number
   linesAdded: number
   linesRemoved: number
+  /** linesAdded - linesRemoved: a quick sense of how much the run grew or shrank the code. */
+  netLines: number
   testRuns: number
   testsPassed: boolean | null // null when no test step is present
   ranTests: boolean
