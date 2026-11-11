@@ -1,5 +1,14 @@
 import type { Trace, TraceMetrics } from './types.js'
 
+/** The distinct files a run edited, sorted — handy for spotting which agents touched the same files. */
+export function touchedFiles(trace: Trace): string[] {
+  const files = new Set<string>()
+  for (const step of trace.steps) {
+    if (step.kind === 'file_edit' || step.kind === 'file_read') files.add(step.text)
+  }
+  return [...files].sort()
+}
+
 /** Summarise a normalised trace into the metrics an evaluator reaches for first. */
 export function metrics(trace: Trace): TraceMetrics {
   const commands = trace.steps.filter((s) => s.kind === 'command')

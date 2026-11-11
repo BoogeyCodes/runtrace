@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { metrics, summarize } from '../src/metrics.js'
+import { metrics, summarize, touchedFiles } from '../src/metrics.js'
 import { normalize } from '../src/normalize.js'
 
 const trace = normalize({
@@ -57,5 +57,20 @@ describe('summarize', () => {
   it('notes when no tests were run', () => {
     const t = normalize({ agent: 'b', steps: [{ command: 'ls' }] })
     expect(summarize(t)).toContain('no tests run')
+  })
+})
+
+describe('touchedFiles', () => {
+  it('returns the distinct edited and read files, sorted', () => {
+    const t = normalize({
+      steps: [
+        { type: 'edit', path: 'src/b.ts', added: 1 },
+        { type: 'edit', path: 'src/a.ts', added: 1 },
+        { type: 'edit', path: 'src/a.ts', added: 2 }, // same file twice
+        { action: 'read', file: 'README.md' },
+        { command: 'ls' },
+      ],
+    })
+    expect(touchedFiles(t)).toEqual(['README.md', 'src/a.ts', 'src/b.ts'])
   })
 })

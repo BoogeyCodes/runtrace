@@ -5,6 +5,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- `touchedFiles(trace)` — the sorted set of distinct files a run edited or read, for
+  spotting when two agents touched the same files.
 - `TraceMetrics.netLines` (`linesAdded - linesRemoved`) — a one-number sense of
   how much a run grew or shrank the codebase, useful when comparing runs.
 
